@@ -1,0 +1,47 @@
+<com.touchnote.renclav.touchnotesampleapp.clues.container.DualPaneCluesContainer xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal"
+    android:showDividers="middle"
+    tools:context="com.touchnote.renclav.touchnotesampleapp.clues.ClueListActivity">
+
+    <FrameLayout
+        android:id="@+id/list_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="0.2">
+
+        <com.touchnote.renclav.touchnotesampleapp.clues.views.CluesRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/clue_list"
+            android:name="com.touchnote.renclav.touchnotesampleapp.ClueListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:context="com.touchnote.renclav.touchnotesampleapp.clues.ClueListActivity" />
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_view"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+    <include
+        layout="@layout/clue_detail"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8" />
+
+</com.touchnote.renclav.touchnotesampleapp.clues.container.DualPaneCluesContainer>
