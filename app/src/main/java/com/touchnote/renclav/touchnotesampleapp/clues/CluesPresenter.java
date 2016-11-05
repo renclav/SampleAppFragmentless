@@ -12,6 +12,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import rx.Observer;
+import rx.Subscription;
 import rx.functions.Action0;
 import rx.subscriptions.CompositeSubscription;
 
@@ -37,6 +38,7 @@ public class CluesPresenter implements CluesContract.Presenter {
 
     @NonNull
     private CompositeSubscription subscriptions;
+    private Subscription loadClueSubscription;
 
     public CluesPresenter(@NonNull CluesRepository cluesRepository,
                           @NonNull CluesContainer cluesView,
@@ -73,32 +75,32 @@ public class CluesPresenter implements CluesContract.Presenter {
         subscriptions.add(
                 cluesRepository
                         .getClues()
-                .subscribeOn(schedulerProvider.computation())
-                .observeOn(schedulerProvider.ui())
-                .doOnTerminate(new Action0() {
-                    @Override
-                    public void call() {
-                        if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
-                            EspressoIdlingResource.decrement(); // Set app as idle.
-                        }
-                    }
-                })
-                .subscribe(new Observer<List<Clue>>() {
-                    @Override
-                    public void onCompleted() {
-                        cluesView.setLoadingIndicator(false);
-                    }
+                        .subscribeOn(schedulerProvider.computation())
+                        .observeOn(schedulerProvider.ui())
+                        .doOnTerminate(new Action0() {
+                            @Override
+                            public void call() {
+                                if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                                    EspressoIdlingResource.decrement(); // Set app as idle.
+                                }
+                            }
+                        })
+                        .subscribe(new Observer<List<Clue>>() {
+                            @Override
+                            public void onCompleted() {
+                                cluesView.setLoadingIndicator(false);
+                            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        cluesView.showLoadingCluesError();
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                cluesView.showLoadingCluesError();
+                            }
 
-                    @Override
-                    public void onNext(List<Clue> clues) {
-                        processClues(clues);
-                    }
-                })
+                            @Override
+                            public void onNext(List<Clue> clues) {
+                                processClues(clues);
+                            }
+                        })
         );
     }
 
@@ -114,6 +116,36 @@ public class CluesPresenter implements CluesContract.Presenter {
     @Override
     public void openClueDetails(@NonNull Clue requestedClue) {
 
+        EspressoIdlingResource.increment();
+        subscriptions.add(
+                cluesRepository
+                        .getClue(requestedClue.getId())
+                        .subscribeOn(schedulerProvider.computation())
+                        .observeOn(schedulerProvider.ui())
+                        .doOnTerminate(new Action0() {
+                            @Override
+                            public void call() {
+                                if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                                    EspressoIdlingResource.decrement(); // Set app as idle.
+                                }
+                            }
+                        })
+                        .subscribe(new Observer<Clue>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(Clue clue) {
+                                cluesView.showClueDetailsUi(clue);
+                            }
+                        }));
     }
 
     @Override
@@ -124,8 +156,7 @@ public class CluesPresenter implements CluesContract.Presenter {
     @Override
     public void updateActivityMenuState(@MenuStates.MenuState int state) {
         ClueListActivity clueListActivity = clueListActivityWeakReference.get();
-        if(clueListActivity != null)
-        {
+        if (clueListActivity != null) {
             clueListActivity.setMenuState(state);
         }
     }

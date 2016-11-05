@@ -34,7 +34,7 @@ public class DualPaneCluesContainer extends LinearLayout implements CluesContain
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        detailView = findViewById(R.id.clue_detail);
+       // detailView = findViewById(R.id.clue_detail);
         cluesRecyclerView = (CluesRecyclerView) findViewById(R.id.clue_list);
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progress_view);
     }
@@ -58,7 +58,7 @@ public class DualPaneCluesContainer extends LinearLayout implements CluesContain
     }
 
     @Override
-    public void showClueDetailsUi(String clueId) {
+    public void showClueDetailsUi(Clue clue) {
 
     }
 

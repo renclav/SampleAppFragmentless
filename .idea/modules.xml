@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/SampleAppFragmentless.iml" filepath="$PROJECT_DIR$/SampleAppFragmentless.iml" />
       <module fileurl="file://$PROJECT_DIR$/TouchnoteSampleApp.iml" filepath="$PROJECT_DIR$/TouchnoteSampleApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>

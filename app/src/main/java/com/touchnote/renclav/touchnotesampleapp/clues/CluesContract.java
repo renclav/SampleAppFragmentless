@@ -20,7 +20,7 @@ public interface CluesContract {
 
         void showClues(List<Clue> clues);
 
-        void showClueDetailsUi(String clueId);
+        void showClueDetailsUi(Clue clue);
 
         void showLoadingCluesError();
 

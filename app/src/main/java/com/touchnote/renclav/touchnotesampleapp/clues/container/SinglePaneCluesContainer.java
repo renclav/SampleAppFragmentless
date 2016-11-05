@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import com.touchnote.renclav.touchnotesampleapp.R;
 import com.touchnote.renclav.touchnotesampleapp.clues.CluesContract;
 import com.touchnote.renclav.touchnotesampleapp.clues.MenuStates;
+import com.touchnote.renclav.touchnotesampleapp.clues.views.ClueDetailView;
 import com.touchnote.renclav.touchnotesampleapp.clues.views.CluesRecyclerView;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class SinglePaneCluesContainer extends FrameLayout implements CluesContainer {
 
     private CluesRecyclerView cluesRecyclerView;
+    private ClueDetailView detailView;
     private CluesContract.Presenter presenter;
 
     private ContentLoadingProgressBar progressBar;
@@ -50,7 +52,8 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
 
     public boolean onBackPressed() {
         if (!cluesRecyclerViewAttached()) {
-            removeViewAt(0);
+           removeView(detailView);
+          //  removeAllViews();
             addView(cluesRecyclerView);
             return true;
         }
@@ -76,13 +79,12 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
     }
 
     @Override
-    public void showClueDetailsUi(String clueId) {
+    public void showClueDetailsUi(Clue clue) {
         if (cluesRecyclerViewAttached()) {
-            removeViewAt(0);
-            View.inflate(getContext(), R.layout.clue_detail, this);
+            removeView(cluesRecyclerView);
+            detailView = (ClueDetailView) View.inflate(getContext(), R.layout.clue_detail, this).findViewById(R.id.clue_detail);
         }
-        //MyDetailView detailView = (MyDetailView) getChildAt(0);
-        //detailView.setItem(item);
+        detailView.setClue(clue);
     }
 
     @Override
