@@ -5,6 +5,7 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.touchnote.renclav.touchnotesampleapp.R;
 import com.touchnote.renclav.touchnotesampleapp.clues.CluesContract;
@@ -12,6 +13,7 @@ import com.touchnote.renclav.touchnotesampleapp.clues.MenuStates;
 import com.touchnote.renclav.touchnotesampleapp.clues.views.ClueDetailView;
 import com.touchnote.renclav.touchnotesampleapp.clues.views.CluesRecyclerView;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
+import com.touchnote.renclav.touchnotesampleapp.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
 
@@ -26,6 +28,8 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
     private CluesContract.Presenter presenter;
 
     private ContentLoadingProgressBar progressBar;
+
+    private BaseSchedulerProvider schedulerProvider;
 
     public SinglePaneCluesContainer(Context context) {
         super(context);
@@ -50,11 +54,14 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progress_view);
     }
 
+    @Override
     public boolean onBackPressed() {
         if (!cluesRecyclerViewAttached()) {
-           removeView(detailView);
-          //  removeAllViews();
+            detailView.setCluesContainer(null);
+            removeView(detailView);
             addView(cluesRecyclerView);
+            presenter.updateActivityMenuState(cluesRecyclerView.isGridLayout() ? MenuStates.GRID : MenuStates.LIST);
+            presenter.setDetailViewIsVisibleWithClue(false, null);
             return true;
         }
         return false;
@@ -62,6 +69,16 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
 
     private boolean cluesRecyclerViewAttached() {
         return cluesRecyclerView.getParent() != null;
+    }
+
+    private boolean cluesDetailViewAttached() {
+        return detailView != null && detailView.getParent() != null;
+    }
+
+    private void setupDetailViewifNull() {
+        if (detailView == null) {
+            detailView = (ClueDetailView) View.inflate(getContext(), R.layout.clue_detail, this).findViewById(R.id.clue_detail);
+        }
     }
 
     @Override
@@ -82,13 +99,32 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
     public void showClueDetailsUi(Clue clue) {
         if (cluesRecyclerViewAttached()) {
             removeView(cluesRecyclerView);
-            detailView = (ClueDetailView) View.inflate(getContext(), R.layout.clue_detail, this).findViewById(R.id.clue_detail);
         }
-        detailView.setClue(clue);
+        setupDetailViewifNull();
+        if (!cluesDetailViewAttached()) {
+            addView(detailView);
+        }
+        detailView.setClueWithSchedulerProvider(clue, schedulerProvider);
+        detailView.setCluesContainer(this);
+        presenter.setDetailViewIsVisibleWithClue(true, clue);
+        presenter.updateActivityMenuState(MenuStates.HIDDEN);
     }
 
     @Override
     public void showLoadingCluesError() {
+
+        final TextView textView = (TextView) findViewById(R.id.errortextView);
+        textView.setText("Sorry, please tap to try again");
+        textView.setVisibility(VISIBLE);
+        textView.setClickable(true);
+        textView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.loadClues(true);
+                textView.setOnClickListener(null);
+                textView.setVisibility(GONE);
+            }
+        });
     }
 
     @Override
@@ -109,5 +145,15 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
     @Override
     public void setPresenter(CluesContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void setSchedulerProvider(BaseSchedulerProvider schedulerProvider) {
+        this.schedulerProvider = schedulerProvider;
+    }
+
+    @Override
+    public void updateSelectedClue(Clue clue) {
+        presenter.setDetailViewIsVisibleWithClue(true, clue);
     }
 }

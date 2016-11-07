@@ -1,6 +1,8 @@
 package com.touchnote.renclav.touchnotesampleapp.clues;
 
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.touchnote.renclav.touchnotesampleapp.BasePresenter;
 import com.touchnote.renclav.touchnotesampleapp.BaseView;
@@ -34,10 +36,16 @@ public interface CluesContract {
 
         void loadClues(boolean forceUpdate);
 
-        void openClueDetails(@NonNull Clue requestedClue);
+        void openClueDetails(@NonNull String requestedClueId);
 
         void toggleListLayout();
 
         void updateActivityMenuState(@MenuStates.MenuState int state);
+
+        void setDetailViewIsVisibleWithClue(boolean visible, @Nullable Clue clue);
+
+        Parcelable getSaveStateParcelable();
+
+        void restoreSaveStateParcelable(Parcelable stateParcelable);
     }
 }

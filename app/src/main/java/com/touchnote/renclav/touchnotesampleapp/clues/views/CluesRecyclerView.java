@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.ClueListActivity;
+import com.touchnote.renclav.touchnotesampleapp.clues.CluesActivity;
 import com.touchnote.renclav.touchnotesampleapp.clues.CluesPresenter;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 
@@ -164,9 +164,9 @@ public class CluesRecyclerView extends RecyclerView {
                 this.view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ClueListActivity activity = (ClueListActivity) getContext();
+                        CluesActivity activity = (CluesActivity) getContext();
                         CluesPresenter cluesPresenter = activity.getCluesPresenter();
-                        cluesPresenter.openClueDetails(clue);
+                        cluesPresenter.openClueDetails(clue.getId());
 
                     }
                 });

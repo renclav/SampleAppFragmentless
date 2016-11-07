@@ -1,6 +1,7 @@
 package com.touchnote.renclav.touchnotesampleapp.clues;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,9 @@ import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
 import com.touchnote.renclav.touchnotesampleapp.util.EspressoIdlingResource;
 
 
-public class ClueListActivity extends AppCompatActivity {
+public class CluesActivity extends AppCompatActivity implements CluesActivityContract {
+
+    private static final String CLUES_PRESENTER_KEY = CluesPresenter.class.getSimpleName();
 
     private CluesPresenter cluesPresenter;
     private CluesContainer container;
@@ -41,8 +44,11 @@ public class ClueListActivity extends AppCompatActivity {
                 Injection.provideCluesRepository(getApplicationContext()),
                 container,
                 Injection.provideSchedulerProvider(), this);
-        //Restore state here
         menuState = MenuStates.LIST;
+        if(savedInstanceState != null)
+        {
+            cluesPresenter.restoreSaveStateParcelable(savedInstanceState.getParcelable(CLUES_PRESENTER_KEY));
+        }
     }
 
     @Override
@@ -59,8 +65,10 @@ public class ClueListActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //  outState.putSerializable(CURRENT_FILTERING_KEY, mTasksPresenter.getFiltering());
-
+        if(cluesPresenter.getSaveStateParcelable() != null)
+        {
+            outState.putParcelable(CLUES_PRESENTER_KEY, cluesPresenter.getSaveStateParcelable());
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -86,6 +94,7 @@ public class ClueListActivity extends AppCompatActivity {
         return EspressoIdlingResource.getIdlingResource();
     }
 
+    @Override
     public void setMenuState(@MenuStates.MenuState int state) {
         this.menuState = state;
         if (toggleItem != null) {

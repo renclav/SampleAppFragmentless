@@ -1,6 +1,8 @@
 package com.touchnote.renclav.touchnotesampleapp.clues;
 
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
@@ -12,7 +14,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import rx.Observer;
-import rx.Subscription;
 import rx.functions.Action0;
 import rx.subscriptions.CompositeSubscription;
 
@@ -21,7 +22,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class CluesPresenter implements CluesContract.Presenter {
-
 
     @NonNull
     private final CluesRepository cluesRepository;
@@ -32,24 +32,28 @@ public class CluesPresenter implements CluesContract.Presenter {
     @NonNull
     private final BaseSchedulerProvider schedulerProvider;
 
-    private final WeakReference<ClueListActivity> clueListActivityWeakReference;
+    private final WeakReference<CluesActivityContract> cluesActivityInterfaceWeakReference;
 
     private boolean mFirstLoad = true;
 
+    private Clue selectedClue;
+
+    private Clue temporySavedClue;
+
     @NonNull
     private CompositeSubscription subscriptions;
-    private Subscription loadClueSubscription;
 
     public CluesPresenter(@NonNull CluesRepository cluesRepository,
                           @NonNull CluesContainer cluesView,
-                          @NonNull BaseSchedulerProvider schedulerProvider, ClueListActivity activity) {
+                          @NonNull BaseSchedulerProvider schedulerProvider, CluesActivityContract cluesActivityInterfacerface) {
 
         this.cluesRepository = cluesRepository;
         this.cluesView = cluesView;
         this.schedulerProvider = schedulerProvider;
         subscriptions = new CompositeSubscription();
         cluesView.setPresenter(this);
-        this.clueListActivityWeakReference = new WeakReference<>(activity);
+        cluesView.setSchedulerProvider(schedulerProvider);
+        this.cluesActivityInterfaceWeakReference = new WeakReference<>(cluesActivityInterfacerface);
     }
 
 
@@ -93,6 +97,7 @@ public class CluesPresenter implements CluesContract.Presenter {
 
                             @Override
                             public void onError(Throwable e) {
+                                cluesView.setLoadingIndicator(false);
                                 cluesView.showLoadingCluesError();
                             }
 
@@ -111,15 +116,20 @@ public class CluesPresenter implements CluesContract.Presenter {
             // Show the list of tasks
             cluesView.showClues(clues);
         }
+        if(temporySavedClue != null)
+        {
+            cluesView.showClueDetailsUi(temporySavedClue);
+            temporySavedClue = null;
+        }
     }
 
     @Override
-    public void openClueDetails(@NonNull Clue requestedClue) {
+    public void openClueDetails(@NonNull String requestedClueId) {
 
         EspressoIdlingResource.increment();
         subscriptions.add(
                 cluesRepository
-                        .getClue(requestedClue.getId())
+                        .getClue(requestedClueId)
                         .subscribeOn(schedulerProvider.computation())
                         .observeOn(schedulerProvider.ui())
                         .doOnTerminate(new Action0() {
@@ -155,11 +165,35 @@ public class CluesPresenter implements CluesContract.Presenter {
 
     @Override
     public void updateActivityMenuState(@MenuStates.MenuState int state) {
-        ClueListActivity clueListActivity = clueListActivityWeakReference.get();
-        if (clueListActivity != null) {
-            clueListActivity.setMenuState(state);
+        CluesActivityContract cluesActivity = cluesActivityInterfaceWeakReference.get();
+        if (cluesActivity != null) {
+            cluesActivity.setMenuState(state);
         }
     }
+
+    @Override
+    public void setDetailViewIsVisibleWithClue(boolean visible, @Nullable Clue clue) {
+        if(visible)
+        {
+            selectedClue = clue;
+        } else {
+            selectedClue = null;
+        }
+    }
+
+    @Override
+    public Parcelable getSaveStateParcelable() {
+        return selectedClue;
+    }
+
+    @Override
+    public void restoreSaveStateParcelable(Parcelable stateParcelable) {
+        if(stateParcelable != null)
+        {
+            temporySavedClue = (Clue) stateParcelable;
+        }
+    }
+
 
     @Override
     public void subscribe() {

@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp;
+package com.touchnote.renclav.touchnotesampleapp.custom.glide;
 
 import android.content.Context;
 

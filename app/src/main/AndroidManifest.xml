@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".clues.ClueListActivity"
+            android:name=".clues.CluesActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,7 +22,7 @@
         </activity>
 
         <meta-data
-            android:name="com.touchnote.renclav.touchnotesampleapp.GlideConfiguration"
+            android:name="com.touchnote.renclav.touchnotesampleapp.custom.glide.GlideConfiguration"
             android:value="GlideModule" />
     </application>
 </manifest>

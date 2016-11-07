@@ -1,21 +1,32 @@
 package com.touchnote.renclav.touchnotesampleapp.clues.views;
 
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.content.Context;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.VisibleForTesting;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 import com.touchnote.renclav.touchnotesampleapp.R;
+import com.touchnote.renclav.touchnotesampleapp.clues.ClueDetailViewContract;
+import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
+import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmap;
+import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmapTranscoder;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
+import com.touchnote.renclav.touchnotesampleapp.util.schedulers.BaseSchedulerProvider;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -23,11 +34,28 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Renclav on 2016/11/05.
  */
 
-public class ClueDetailView extends LinearLayout {
+public class ClueDetailView extends LinearLayout implements ClueDetailViewContract {
 
-    private ImageView imageView;
+    private TimeInterpolator interpolator;
+
+    private MorphingImageView imageView;
     private SeekBar seekBar;
+    private FrameLayout imageViewFrame;
+
+    private BaseSchedulerProvider schedulerProvider;
     private CompositeSubscription subscription;
+
+    private ContentLoadingProgressBar progressBar;
+
+    private Clue currentClue;
+
+    private CluesContainer cluesContainer;
+
+    private
+    @ColorInt
+    int defaultbackroundColour;
+
+    private ObjectAnimator morphAnimation;
 
     public ClueDetailView(Context context) {
         super(context);
@@ -51,14 +79,20 @@ public class ClueDetailView extends LinearLayout {
 
     private void init() {
         subscription = new CompositeSubscription();
+        interpolator = new LinearInterpolator();
+        defaultbackroundColour = ContextCompat.getColor(ClueDetailView.this.getContext(), R.color.primary);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (MorphingImageView) findViewById(R.id.imageView);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
+        imageViewFrame = (FrameLayout) findViewById(R.id.imageViewBorderFrame);
+        progressBar = (ContentLoadingProgressBar) findViewById(R.id.progress_view);
+        progressBar.hide();
         seekBar.setEnabled(false);
+        imageView.setRange(seekBar.getMax());
     }
 
     @Override
@@ -68,42 +102,114 @@ public class ClueDetailView extends LinearLayout {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+        imageView.setImageDrawable(null);
+        imageViewFrame.setBackgroundColor(Color.TRANSPARENT);
         subscription.clear();
+        progressBar.hide();
+        if (cluesContainer != null) {
+            cluesContainer.updateSelectedClue(null);
+        }
+        super.onDetachedFromWindow();
     }
 
-    public void setClue(Clue clue) {
+
+    @Override
+    public void setClueWithSchedulerProvider(Clue clue, BaseSchedulerProvider schedulerProvider) {
+
+        currentClue = clue;
+        setSchedulerProvider(schedulerProvider);
+
+        imageView.revertView();
+        seekBar.setVisibility(VISIBLE);
+        seekBar.setProgress(clue.getMorphStep());
+        seekBar.setEnabled(false);
+        seekBar.setPressed(false);
+        progressBar.show(); //TODO: prob best to re-inflate this everytime,or roll my own, since the internal timer is shared
+        //TODO: Need to force Glide to use schedulerProvider above, rely on Glide's testing for now
         Glide.with(getContext())
                 .load(clue.getImage())
-                .placeholder(R.drawable.ic_timelapse_black_24dp)
+                .asBitmap()
+                .transcode(new PaletteBitmapTranscoder(getContext()), PaletteBitmap.class)
                 .error(R.drawable.ic_block_black_24dp)
-                .centerCrop()
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .dontAnimate()
+                .listener(new RequestListener<String, PaletteBitmap>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onException(Exception e, String model, Target<PaletteBitmap> target, boolean isFirstResource) {
+                        progressBar.hide();
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(PaletteBitmap resource, String model, Target<PaletteBitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         //Image loaded
+                        progressBar.hide();
                         setUpSeekbar();
                         return false;
                     }
                 })
-                .into(this.imageView);
+                .into(new ImageViewTarget<PaletteBitmap>(this.imageView) {
+                    @Override
+                    protected void setResource(PaletteBitmap resource) {
+                        super.view.setImageBitmap(resource.bitmap);
+                        int colour = resource.palette.getVibrantColor(defaultbackroundColour);
+                        imageViewFrame.setBackgroundColor(colour);
+                    }
+                });
     }
 
     private void setUpSeekbar() {
         seekBar.setEnabled(true);
         subscription.add(
                 RxSeekBar.userChanges(seekBar)
-                        .subscribeOn(AndroidSchedulers.mainThread())
+//                        /.debounce(200, TimeUnit.MILLISECONDS, schedulerProvider.computation()) //TODO: play around some more, not sure I like this, feels unnatural
+                        .distinctUntilChanged()
+                        .observeOn(schedulerProvider.ui())
+                        .subscribeOn(schedulerProvider.ui())
                         .subscribe(new Action1<Integer>() {
                             @Override
                             public void call(Integer integer) {
-
+                                setMaskWithStep(integer.intValue());
                             }
                         }));
+    }
+
+    private void setMaskWithStep(int step) {
+
+        currentClue.setMorphStep(step);
+        if (cluesContainer != null) {
+            cluesContainer.updateSelectedClue(currentClue);
+        }
+
+        if (morphAnimation != null && morphAnimation.isStarted()) {
+            morphAnimation.end();
+        }
+
+        morphAnimation = ObjectAnimator.ofInt(imageView, "morphStep", step);
+        morphAnimation.setRepeatCount(0);
+        morphAnimation.setDuration(200);
+        morphAnimation.setInterpolator(interpolator);
+        morphAnimation.start();
+    }
+
+    private void revertState() {
+        imageView.revertView();
+        seekBar.setEnabled(false);
+        seekBar.setPressed(false);
+        seekBar.setProgress(0);
+    }
+
+    public void showNoSelection() {
+        seekBar.setVisibility(GONE);
+        imageView.setImageResource(R.drawable.coffee_cup);
+    }
+
+    @VisibleForTesting
+    public void setSchedulerProvider(BaseSchedulerProvider schedulerProvider) {
+        this.schedulerProvider = schedulerProvider;
+    }
+
+    @Override
+    public void setCluesContainer(CluesContainer cluesContainer) {
+        this.cluesContainer = cluesContainer;
     }
 }
