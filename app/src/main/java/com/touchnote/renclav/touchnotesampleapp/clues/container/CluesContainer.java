@@ -1,6 +1,6 @@
 package com.touchnote.renclav.touchnotesampleapp.clues.container;
 
-import com.touchnote.renclav.touchnotesampleapp.clues.CluesContract;
+import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesContract;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 import com.touchnote.renclav.touchnotesampleapp.util.schedulers.BaseSchedulerProvider;
 

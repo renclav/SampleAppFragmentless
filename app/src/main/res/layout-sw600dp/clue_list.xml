@@ -17,9 +17,9 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_weight="0.2">
+        android:layout_weight="0.3">
 
-        <com.touchnote.renclav.touchnotesampleapp.clues.views.CluesRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.touchnote.renclav.touchnotesampleapp.clues.view.CluesRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/clue_list"
             android:name="com.touchnote.renclav.touchnotesampleapp.ClueListFragment"
@@ -49,6 +49,6 @@
         layout="@layout/clue_detail"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.8" />
+        android:layout_weight="0.7" />
 
 </com.touchnote.renclav.touchnotesampleapp.clues.container.DualPaneCluesContainer>

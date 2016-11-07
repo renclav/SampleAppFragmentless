@@ -1,5 +1,4 @@
-<com.touchnote.renclav.touchnotesampleapp.clues.views.ClueDetailView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.touchnote.renclav.touchnotesampleapp.clues.view.ClueDetailView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/clue_detail"
     android:layout_width="match_parent"
@@ -8,16 +7,17 @@
     android:orientation="vertical"
     android:padding="@dimen/activity_horizontal_margin">
 
-    <android.support.percent.PercentFrameLayout
+    <com.touchnote.renclav.touchnotesampleapp.custom.FixedAspectLayout
         android:id="@+id/imageViewBorderFrame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <com.touchnote.renclav.touchnotesampleapp.clues.views.MorphingImageView
+        <com.touchnote.renclav.touchnotesampleapp.clues.view.MorphingImageView
             android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:layout_aspectRatio="100%"
-            app:layout_widthPercent="100%"
             tools:src="@mipmap/ic_launcher" />
 
 
@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
-    </android.support.percent.PercentFrameLayout>
+    </com.touchnote.renclav.touchnotesampleapp.custom.FixedAspectLayout>
 
     <SeekBar
         android:id="@+id/seekBar"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:max="10"
-        android:minHeight="30dp"
         android:maxHeight="30dp"
+        android:minHeight="30dp"
         android:progress="0" />
-</com.touchnote.renclav.touchnotesampleapp.clues.views.ClueDetailView>
+</com.touchnote.renclav.touchnotesampleapp.clues.view.ClueDetailView>

@@ -2,16 +2,18 @@ package com.touchnote.renclav.touchnotesampleapp.clues.container;
 
 import android.content.Context;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.transition.Fade;
+import android.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.CluesContract;
+import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesContract;
 import com.touchnote.renclav.touchnotesampleapp.clues.MenuStates;
-import com.touchnote.renclav.touchnotesampleapp.clues.views.ClueDetailView;
-import com.touchnote.renclav.touchnotesampleapp.clues.views.CluesRecyclerView;
+import com.touchnote.renclav.touchnotesampleapp.clues.view.ClueDetailView;
+import com.touchnote.renclav.touchnotesampleapp.clues.view.CluesRecyclerView;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 import com.touchnote.renclav.touchnotesampleapp.util.schedulers.BaseSchedulerProvider;
 
@@ -97,6 +99,10 @@ public class SinglePaneCluesContainer extends FrameLayout implements CluesContai
 
     @Override
     public void showClueDetailsUi(Clue clue) {
+
+        TransitionManager.beginDelayedTransition(this, new android.transition.Fade(Fade.IN));
+
+
         if (cluesRecyclerViewAttached()) {
             removeView(cluesRecyclerView);
         }

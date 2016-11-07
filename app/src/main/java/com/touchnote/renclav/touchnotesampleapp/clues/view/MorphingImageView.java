@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues.views;
+package com.touchnote.renclav.touchnotesampleapp.clues.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

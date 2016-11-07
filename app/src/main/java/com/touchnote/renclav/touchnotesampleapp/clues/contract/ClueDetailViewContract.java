@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues;
+package com.touchnote.renclav.touchnotesampleapp.clues.contract;
 
 import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;

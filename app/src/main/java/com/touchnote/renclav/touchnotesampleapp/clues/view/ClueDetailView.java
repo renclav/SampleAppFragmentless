@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues.views;
+package com.touchnote.renclav.touchnotesampleapp.clues.view;
 
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
@@ -8,6 +8,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -20,7 +21,7 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.ClueDetailViewContract;
+import com.touchnote.renclav.touchnotesampleapp.clues.contract.ClueDetailViewContract;
 import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
 import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmap;
 import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmapTranscoder;
@@ -116,18 +117,33 @@ public class ClueDetailView extends LinearLayout implements ClueDetailViewContra
     @Override
     public void setClueWithSchedulerProvider(Clue clue, BaseSchedulerProvider schedulerProvider) {
 
-        currentClue = clue;
+        resetWithClue(clue);
         setSchedulerProvider(schedulerProvider);
+        loadImage();
+    }
 
+    private void resetWithClue(Clue clue)
+    {
+        //Nice to have, resetting morph step if clicking same list item in dual pane mode
+        if(currentClue != null && TextUtils.equals(currentClue.getId(), clue.getId()))
+        {
+            clue.setMorphStep(0);
+        }
+        currentClue = clue;
+        imageViewFrame.setBackgroundColor(Color.TRANSPARENT);
         imageView.revertView();
         seekBar.setVisibility(VISIBLE);
         seekBar.setProgress(clue.getMorphStep());
         seekBar.setEnabled(false);
         seekBar.setPressed(false);
         progressBar.show(); //TODO: prob best to re-inflate this everytime,or roll my own, since the internal timer is shared
+    }
+
+    private void loadImage()
+    {
         //TODO: Need to force Glide to use schedulerProvider above, rely on Glide's testing for now
         Glide.with(getContext())
-                .load(clue.getImage())
+                .load(currentClue.getImage())
                 .asBitmap()
                 .transcode(new PaletteBitmapTranscoder(getContext()), PaletteBitmap.class)
                 .error(R.drawable.ic_block_black_24dp)
@@ -191,13 +207,6 @@ public class ClueDetailView extends LinearLayout implements ClueDetailViewContra
         morphAnimation.start();
     }
 
-    private void revertState() {
-        imageView.revertView();
-        seekBar.setEnabled(false);
-        seekBar.setPressed(false);
-        seekBar.setProgress(0);
-    }
-
     public void showNoSelection() {
         seekBar.setVisibility(GONE);
         imageView.setImageResource(R.drawable.coffee_cup);
@@ -211,5 +220,9 @@ public class ClueDetailView extends LinearLayout implements ClueDetailViewContra
     @Override
     public void setCluesContainer(CluesContainer cluesContainer) {
         this.cluesContainer = cluesContainer;
+        if(this.cluesContainer == null)
+        {
+            currentClue = null;
+        }
     }
 }

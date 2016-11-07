@@ -1,10 +1,13 @@
-package com.touchnote.renclav.touchnotesampleapp.clues;
+package com.touchnote.renclav.touchnotesampleapp.clues.presenter;
 
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.touchnote.renclav.touchnotesampleapp.clues.MenuStates;
 import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
+import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesActivityContract;
+import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesContract;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 import com.touchnote.renclav.touchnotesampleapp.data.source.CluesRepository;
 import com.touchnote.renclav.touchnotesampleapp.util.EspressoIdlingResource;

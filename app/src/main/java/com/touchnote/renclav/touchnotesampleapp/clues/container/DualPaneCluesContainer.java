@@ -8,10 +8,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.CluesContract;
+import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesContract;
 import com.touchnote.renclav.touchnotesampleapp.clues.MenuStates;
-import com.touchnote.renclav.touchnotesampleapp.clues.views.ClueDetailView;
-import com.touchnote.renclav.touchnotesampleapp.clues.views.CluesRecyclerView;
+import com.touchnote.renclav.touchnotesampleapp.clues.view.ClueDetailView;
+import com.touchnote.renclav.touchnotesampleapp.clues.view.CluesRecyclerView;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 import com.touchnote.renclav.touchnotesampleapp.util.schedulers.BaseSchedulerProvider;
 

@@ -1,7 +1,6 @@
 package com.touchnote.renclav.touchnotesampleapp.clues;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +12,8 @@ import android.view.MenuItem;
 import com.touchnote.renclav.touchnotesampleapp.Injection;
 import com.touchnote.renclav.touchnotesampleapp.R;
 import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
+import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesActivityContract;
+import com.touchnote.renclav.touchnotesampleapp.clues.presenter.CluesPresenter;
 import com.touchnote.renclav.touchnotesampleapp.util.EspressoIdlingResource;
 
 

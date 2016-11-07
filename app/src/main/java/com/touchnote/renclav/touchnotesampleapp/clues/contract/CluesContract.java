@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues;
+package com.touchnote.renclav.touchnotesampleapp.clues.contract;
 
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.touchnote.renclav.touchnotesampleapp.BasePresenter;
 import com.touchnote.renclav.touchnotesampleapp.BaseView;
+import com.touchnote.renclav.touchnotesampleapp.clues.MenuStates;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 
 import java.util.List;
