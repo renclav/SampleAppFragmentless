@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues;
+package com.touchnote.renclav.touchnotesampleapp.clue;
 
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
@@ -11,9 +11,9 @@ import android.view.MenuItem;
 
 import com.touchnote.renclav.touchnotesampleapp.Injection;
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
-import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesActivityContract;
-import com.touchnote.renclav.touchnotesampleapp.clues.presenter.CluesPresenter;
+import com.touchnote.renclav.touchnotesampleapp.clue.container.CluesContainer;
+import com.touchnote.renclav.touchnotesampleapp.clue.contract.CluesActivityContract;
+import com.touchnote.renclav.touchnotesampleapp.clue.presenter.CluesPresenter;
 import com.touchnote.renclav.touchnotesampleapp.util.EspressoIdlingResource;
 
 
@@ -102,10 +102,12 @@ public class CluesActivity extends AppCompatActivity implements CluesActivityCon
             switch (this.menuState) {
                 case MenuStates.LIST:
                     toggleItem.setIcon(R.drawable.ic_grid_black_24dp);
+                    toggleItem.setTitle(R.string.list_menu_item_description);
                     toggleItem.setVisible(true);
                     break;
                 case MenuStates.GRID:
                     toggleItem.setIcon(R.drawable.ic_list_black_24dp);
+                    toggleItem.setTitle(R.string.grid_menu_item_description);
                     toggleItem.setVisible(true);
                     break;
                 default:

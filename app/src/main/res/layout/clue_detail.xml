@@ -1,4 +1,4 @@
-<com.touchnote.renclav.touchnotesampleapp.clues.view.ClueDetailView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.touchnote.renclav.touchnotesampleapp.clue.view.ClueDetailView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/clue_detail"
     android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.touchnote.renclav.touchnotesampleapp.clues.view.MorphingImageView
+        <com.touchnote.renclav.touchnotesampleapp.clue.view.MorphingImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -41,4 +41,4 @@
         android:maxHeight="30dp"
         android:minHeight="30dp"
         android:progress="0" />
-</com.touchnote.renclav.touchnotesampleapp.clues.view.ClueDetailView>
+</com.touchnote.renclav.touchnotesampleapp.clue.view.ClueDetailView>

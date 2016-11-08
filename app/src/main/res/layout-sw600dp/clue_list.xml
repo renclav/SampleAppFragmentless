@@ -1,4 +1,4 @@
-<com.touchnote.renclav.touchnotesampleapp.clues.container.DualPaneCluesContainer xmlns:android="http://schemas.android.com/apk/res/android"
+<com.touchnote.renclav.touchnotesampleapp.clue.container.DualPaneCluesContainer xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="com.touchnote.renclav.touchnotesampleapp.clues.CluesActivity">
+    tools:context="com.touchnote.renclav.touchnotesampleapp.clue.CluesActivity">
 
     <FrameLayout
         android:id="@+id/list_wrapper"
@@ -19,14 +19,14 @@
         android:layout_marginRight="16dp"
         android:layout_weight="0.3">
 
-        <com.touchnote.renclav.touchnotesampleapp.clues.view.CluesRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.touchnote.renclav.touchnotesampleapp.clue.view.CluesRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/clue_list"
             android:name="com.touchnote.renclav.touchnotesampleapp.ClueListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            tools:context="com.touchnote.renclav.touchnotesampleapp.clues.CluesActivity" />
+            tools:context="com.touchnote.renclav.touchnotesampleapp.clue.CluesActivity" />
 
         <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/progress_view"
@@ -51,4 +51,4 @@
         android:layout_height="match_parent"
         android:layout_weight="0.7" />
 
-</com.touchnote.renclav.touchnotesampleapp.clues.container.DualPaneCluesContainer>
+</com.touchnote.renclav.touchnotesampleapp.clue.container.DualPaneCluesContainer>

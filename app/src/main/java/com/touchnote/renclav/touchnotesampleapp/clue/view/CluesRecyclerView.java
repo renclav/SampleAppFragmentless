@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues.view;
+package com.touchnote.renclav.touchnotesampleapp.clue.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.CluesActivity;
-import com.touchnote.renclav.touchnotesampleapp.clues.presenter.CluesPresenter;
+import com.touchnote.renclav.touchnotesampleapp.clue.CluesActivity;
+import com.touchnote.renclav.touchnotesampleapp.clue.presenter.CluesPresenter;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 
 import java.util.ArrayList;

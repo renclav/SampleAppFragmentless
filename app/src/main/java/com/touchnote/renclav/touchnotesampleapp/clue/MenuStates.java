@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues;
+package com.touchnote.renclav.touchnotesampleapp.clue;
 
 import android.support.annotation.IntDef;
 

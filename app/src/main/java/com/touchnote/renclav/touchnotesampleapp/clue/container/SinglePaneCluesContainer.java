@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues.container;
+package com.touchnote.renclav.touchnotesampleapp.clue.container;
 
 import android.content.Context;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -10,10 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.contract.CluesContract;
-import com.touchnote.renclav.touchnotesampleapp.clues.MenuStates;
-import com.touchnote.renclav.touchnotesampleapp.clues.view.ClueDetailView;
-import com.touchnote.renclav.touchnotesampleapp.clues.view.CluesRecyclerView;
+import com.touchnote.renclav.touchnotesampleapp.clue.contract.CluesContract;
+import com.touchnote.renclav.touchnotesampleapp.clue.MenuStates;
+import com.touchnote.renclav.touchnotesampleapp.clue.view.ClueDetailView;
+import com.touchnote.renclav.touchnotesampleapp.clue.view.CluesRecyclerView;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
 import com.touchnote.renclav.touchnotesampleapp.util.schedulers.BaseSchedulerProvider;
 
@@ -21,8 +21,8 @@ import java.util.List;
 
 /**
  * Created by Renclav on 2016/11/03.
+ * Manages and displays list and detail view
  */
-
 public class SinglePaneCluesContainer extends FrameLayout implements CluesContainer {
 
     private CluesRecyclerView cluesRecyclerView;

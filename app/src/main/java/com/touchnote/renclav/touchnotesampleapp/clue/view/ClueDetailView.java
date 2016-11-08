@@ -1,4 +1,4 @@
-package com.touchnote.renclav.touchnotesampleapp.clues.view;
+package com.touchnote.renclav.touchnotesampleapp.clue.view;
 
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
@@ -21,8 +21,8 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clues.contract.ClueDetailViewContract;
-import com.touchnote.renclav.touchnotesampleapp.clues.container.CluesContainer;
+import com.touchnote.renclav.touchnotesampleapp.clue.contract.ClueDetailViewContract;
+import com.touchnote.renclav.touchnotesampleapp.clue.container.CluesContainer;
 import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmap;
 import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmapTranscoder;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
