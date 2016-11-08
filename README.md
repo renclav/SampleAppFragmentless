@@ -5,7 +5,7 @@ Please note the dummy api changes the images returned regularly, this can lead t
 Simple app that displays nonsensical data in a list/grid on screen using Google's suggested architecture and ViewGroups in place of fragments. Would have preferred a more Clean Architecture style, but felt that unnecessary for such a small app and... I wanted to try something different :)
 
 # On Phones:
-Master View (Recycler view) with switchable layouts, upon row item selection, detail view(image with range slider) is displayed
+Master view (Recycler view) with switchable layouts, upon row item selection, detail view(image with range slider) is displayed
 
 # On Tablets (sw600dp):
 Master detail views are displayed at the same time
