@@ -17,7 +17,7 @@ import android.widget.ImageView;
  */
 
 /**
- * ImageView with ability to morph into a cirle
+ * ImageView with ability to morph into a circle
  * Expects 1:1 ratio
  */
 public class MorphingImageView extends ImageView {

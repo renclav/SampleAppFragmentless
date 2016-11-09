@@ -10,7 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -21,8 +21,8 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 import com.touchnote.renclav.touchnotesampleapp.R;
-import com.touchnote.renclav.touchnotesampleapp.clue.contract.ClueDetailViewContract;
 import com.touchnote.renclav.touchnotesampleapp.clue.container.CluesContainer;
+import com.touchnote.renclav.touchnotesampleapp.clue.contract.ClueDetailViewContract;
 import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmap;
 import com.touchnote.renclav.touchnotesampleapp.custom.glide.PaletteBitmapTranscoder;
 import com.touchnote.renclav.touchnotesampleapp.data.Clue;
@@ -80,7 +80,7 @@ public class ClueDetailView extends LinearLayout implements ClueDetailViewContra
 
     private void init() {
         subscription = new CompositeSubscription();
-        interpolator = new LinearInterpolator();
+        interpolator = new DecelerateInterpolator();
         defaultbackroundColour = ContextCompat.getColor(ClueDetailView.this.getContext(), R.color.primary);
     }
 
